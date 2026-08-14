@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>JollyEnglish · Learning Journey Tracker</title>
+<style>
+:root{--cream:#fff9ee;--paper:#fffdf8;--paper2:#fbf4e8;--ink:#472718;--muted:#806c5e;--line:#eadcc8;--olive:#71873b;--moss:#97a65b;--pumpkin:#e98724;--rust:#c85120;--gold:#e0b15b;--green:#5f7e36;--shadow:0 12px 30px rgba(91,58,29,.10);--radius:24px}
+*{box-sizing:border-box}body{margin:0;color:var(--ink);font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;background:radial-gradient(circle at 8% 0%,#fff4dc 0,transparent 28rem),linear-gradient(180deg,#fffaf1 0,#f8f0e3 100%)}button{font:inherit;cursor:pointer}.app{width:min(1180px,calc(100% - 28px));margin:auto;padding:16px 0 36px}.card{background:rgba(255,253,248,.96);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.hero{position:relative;overflow:hidden;min-height:330px;padding:28px 34px 26px;display:grid;grid-template-columns:1.1fr .9fr;align-items:center;background:linear-gradient(135deg,#fffdf8 0,#fff8eb 100%);border:1px solid #eedfc7;border-radius:28px;box-shadow:var(--shadow)}.hero-copy{z-index:3}.brand{display:inline-flex;align-items:center;gap:9px;padding:8px 14px;border:1px solid #ecd8bc;border-radius:999px;background:#fffaf2;font-weight:900;color:#7b351e}.brand-leaf{font-size:20px}.hero h1{margin:18px 0 10px;font-family:Georgia,"Times New Roman",serif;font-size:clamp(43px,6vw,70px);line-height:.96;letter-spacing:-.04em}.hero p{max-width:600px;margin:0;color:#705c50;line-height:1.55;font-size:15px}.motto{margin-top:20px;color:var(--rust);font-family:Georgia,"Times New Roman",serif;font-size:18px;font-weight:700}.hero-art{position:relative;height:275px;z-index:2}.hero-art svg{width:100%;height:100%;overflow:visible}.speech{position:absolute;right:4%;top:40%;max-width:180px;padding:16px 17px;background:#fffdf9;border:1px solid #eadbc6;border-radius:26px;text-align:center;font-weight:800;line-height:1.35;box-shadow:0 10px 24px rgba(85,54,28,.09)}.speech:before{content:"";position:absolute;left:-8px;top:35px;width:16px;height:16px;background:#fffdf9;border-left:1px solid #eadbc6;border-bottom:1px solid #eadbc6;transform:rotate(45deg)}.decor{position:absolute;pointer-events:none}.leaf1{left:45%;top:40%;font-size:28px;transform:rotate(22deg)}.leaf2{left:34%;bottom:17%;font-size:24px;transform:rotate(-18deg)}.leaf3{right:28%;bottom:10%;font-size:22px}.mushrooms{position:absolute;left:22px;bottom:8px;font-size:34px;letter-spacing:-7px}.branch{position:absolute;right:-10px;top:-8px;font-size:62px;transform:rotate(11deg);opacity:.95}
+.syncbar{margin:14px 0;padding:13px 18px;display:flex;justify-content:space-between;align-items:center;gap:15px}.sync-info{display:flex;align-items:center;gap:12px}.sync-icon{width:38px;height:38px;border:1px solid #ead7bd;border-radius:50%;display:grid;place-items:center;font-size:21px}.updated{font-weight:900;font-size:13px}.source{font-size:11px;color:var(--muted);margin-top:2px}.refresh{border:0;border-radius:999px;padding:11px 18px;background:linear-gradient(180deg,#8ca151,#6f8738);color:white;font-weight:900;box-shadow:0 7px 15px rgba(91,112,48,.22)}.refresh.loading .refresh-icon{display:inline-block;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.student-panel{padding:19px 20px;margin-bottom:14px}.section-title{margin:0 0 14px;font-family:Georgia,"Times New Roman",serif;font-size:22px}.student-tabs{display:flex;gap:12px;flex-wrap:wrap}.student-btn{min-width:125px;padding:11px 15px;border:1px solid #eadcc8;background:#fffdf9;border-radius:14px;color:var(--ink);font-weight:800;display:flex;align-items:center;gap:9px;justify-content:center;transition:.18s}.student-btn:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(83,53,26,.07)}.student-btn.active{border-color:var(--olive);background:#f1f4df;box-shadow:inset 0 0 0 1px var(--olive)}.student-animal{font-size:25px}
+.overview{display:grid;grid-template-columns:1.05fr 2.2fr;margin-bottom:14px;overflow:hidden}.profile{padding:24px 28px;background:linear-gradient(135deg,#f7f3dd,#fffdf8);position:relative}.profile:after{content:"🍁 🌿";position:absolute;left:20px;bottom:7px;font-size:28px}.avatar{width:86px;height:86px;border-radius:50%;background:#fff;border:1px solid #eadcc8;display:grid;place-items:center;font-size:49px;box-shadow:0 8px 18px rgba(82,51,25,.08)}.student-name{font:700 36px/1 Georgia,serif;margin:14px 0 7px}.level-badge{display:inline-block;padding:5px 12px;border-radius:999px;background:var(--olive);color:white;font-weight:900;font-size:13px}.profile-meta,.teacher{font-size:12px;color:var(--muted);margin-top:8px}.teacher{color:#684b3a}.metrics{display:grid;grid-template-columns:repeat(3,1fr);background:#fffdf8}.metric{padding:22px 18px;text-align:center;border-left:1px solid #eee2d1}.metric-label{font-family:Georgia,serif;font-weight:700;font-size:17px}.ring{--pct:0;display:grid;place-items:center;width:106px;height:106px;margin:13px auto 8px;border-radius:50%;background:conic-gradient(var(--olive) calc(var(--pct)*1%),#ebe6d5 0);position:relative}.ring:before{content:"";position:absolute;inset:13px;border-radius:50%;background:#fffdf8}.ring strong{z-index:2;font-size:29px}.big-metric{font-size:38px;font-weight:900;margin:22px 0 10px}.homework-val{color:var(--rust)}.attendance-val{color:var(--green)}.metric-note{font-size:13px;color:#5f503e;font-weight:800}
+.journey-card,.skills-card{padding:20px 24px;margin-bottom:14px;position:relative}.journey-card:after{content:"🍄";position:absolute;right:18px;bottom:10px;font-size:55px;opacity:.9}.journey{display:grid;grid-template-columns:repeat(5,1fr);position:relative;padding:15px 24px 5px}.journey:before{content:"";position:absolute;left:9%;right:9%;top:43px;height:2px;background:#98a667}.test-stop{position:relative;text-align:center;z-index:2;padding:0 8px;cursor:default}.test-node{width:48px;height:48px;margin:0 auto 8px;border-radius:50%;display:grid;place-items:center;background:#f2ead8;border:2px solid #c9bca6;color:#8e806e;font-weight:900}.test-stop.clickable{cursor:pointer}.test-stop.clickable .test-node{background:linear-gradient(180deg,#97aa5a,#71873b);border-color:#71873b;color:white;box-shadow:0 5px 12px rgba(82,106,48,.18)}.test-stop:last-child.clickable .test-node{background:#fff0d9;color:var(--rust);border-color:var(--pumpkin)}.test-name{font-weight:900;font-size:13px;min-height:34px}.test-date{font-size:11px;color:var(--muted);margin-top:4px}.test-score{font-size:12px;color:var(--olive);font-weight:900;margin-top:5px}.journey-hint{text-align:center;color:#725b49;font-size:12px;margin-top:8px}.detail{display:none;margin:14px 8px 0;padding:15px;background:#fbf6eb;border:1px dashed #d9c7ac;border-radius:18px}.detail.open{display:block}.detail-title{font-weight:900;margin-bottom:10px}.detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.detail-item{background:#fffdf8;border:1px solid #eadcc8;border-radius:12px;padding:10px}.detail-skill{display:block;font-size:10px;color:var(--muted);font-weight:900}.tiny-track{height:6px;margin-top:7px;border-radius:99px;background:#eee6d7;overflow:hidden}.tiny-track span{display:block;height:100%;border-radius:99px}
+.skills-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.skill-card{padding:15px 12px;border:1px solid #eadcc8;border-radius:16px;background:#fffdf8;text-align:center}.skill-top{display:flex;align-items:center;justify-content:center;gap:7px;min-height:30px}.skill-icon{font-size:23px}.skill-name{font-size:12px;font-weight:900}.skill-score{font-size:23px;font-weight:900;margin:10px 0 7px}.skill-track{height:7px;border-radius:99px;background:#eee6d7;overflow:hidden}.skill-track span{display:block;height:100%;border-radius:99px}.skill-label{font-size:10px;color:#6e5e50;margin-top:7px}.footer{text-align:center;color:#735e4c;font-size:11px;padding:5px}.footer .leaf{color:var(--rust)}.error{margin:12px 0;padding:12px 14px;border:1px solid #e3b7a1;background:#fff2e8;color:#8a3f24;border-radius:14px;font-size:12px}.hidden{display:none!important}.status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--olive);margin-right:6px}.status-dot.error{background:var(--rust)}
+@media(max-width:900px){.hero{grid-template-columns:1fr;min-height:auto}.hero-art{height:230px}.overview{grid-template-columns:1fr}.metrics{border-top:1px solid var(--line)}.metric:first-child{border-left:0}.skills-grid{grid-template-columns:repeat(3,1fr)}.journey{padding-inline:0}.journey-card:after{display:none}}
+@media(max-width:620px){.app{width:min(100% - 14px,1180px);padding-top:7px}.hero{padding:22px 18px}.hero h1{font-size:45px}.hero-art{height:190px}.speech{right:0;top:34%;font-size:11px;max-width:140px}.branch{font-size:42px}.syncbar{align-items:flex-start}.updated{font-size:11px}.refresh{padding:9px 12px}.student-btn{min-width:auto;padding:9px 11px}.student-animal{font-size:21px}.metrics{grid-template-columns:1fr}.metric{border-left:0;border-top:1px solid #eee2d1}.metric:first-child{border-top:0}.journey{grid-template-columns:repeat(2,1fr);gap:20px}.journey:before{display:none}.test-stop:last-child{grid-column:1/-1}.detail-grid{grid-template-columns:repeat(2,1fr)}.skills-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head><body><main class="app">
+<header class="hero">
+<div class="hero-copy"><div class="brand"><span class="brand-leaf">🍂</span>JollyEnglish</div><h1>Learning journey<br>tracker</h1><p>See progress, celebrate wins and notice the next small step.<br>Your Google Sheet stays the source of truth.</p><div class="motto">🍁 Small steps. Big adventures.</div></div>
+<div class="hero-art">
+<svg viewBox="0 0 430 290" aria-label="Hand-drawn JollyEnglish hedgehog"><g stroke="#33251d" stroke-linecap="round" stroke-linejoin="round"><path d="M165 36c-44 7-77 43-82 92-4 43 13 91 49 115 38 26 83 9 103-25 19-33 16-83 1-123-14-38-39-65-71-59z" fill="#bd9a6b" opacity=".76" stroke="none"/><g stroke-width="6"><path d="M151 43l-12 23M175 39l-7 28M126 52l-15 20M197 48l-8 25M108 68l-16 15M214 67l-9 24M96 88l-15 11M225 88l-10 24M91 111l-13 7M229 113l-10 24M92 138l-12 3M226 141l-10 22M101 165l-12 0M212 169l-8 20M115 192l-10-1M190 196l-4 20" fill="none"/></g><path d="M170 66c33-6 66 11 80 39 14 28 10 73-3 105-11 28-28 49-50 53-21 4-35-13-32-34 4-27 17-48 15-76-2-33-20-73-10-87z" fill="#f1d5aa" stroke-width="4"/><path d="M240 105c29 2 48 12 64 27-20 8-38 10-58 8" fill="#f1d5aa" stroke-width="4"/><circle cx="302" cy="132" r="6" fill="#33251d"/><circle cx="222" cy="96" r="5" fill="#33251d"/><path d="M247 142c9 7 18 7 26 0" fill="none" stroke-width="4"/><path d="M188 241c-3 18-1 30 7 38M218 242c5 18 6 29 4 37" fill="none" stroke-width="6"/><path d="M195 280c-10 4-18 2-22-1M224 280c10 4 18 2 23-1" fill="none" stroke-width="5"/><path d="M228 184c12 7 19 18 20 32" fill="none" stroke-width="5"/><path d="M249 202l24-17 16 38-28 15z" fill="#879b4d" stroke-width="4"/><path d="M261 190l9 38" fill="none" stroke="#fff9ec" stroke-width="3"/></g></svg>
+<div class="speech" id="mascotSpeech">Ready for another small step?</div></div>
+<div class="decor branch">🍁🍂</div><div class="decor leaf1">🍂</div><div class="decor leaf2">🍁</div><div class="decor leaf3">🍃</div><div class="mushrooms">🍄🍄</div>
+</header>
+<div id="errorBox" class="error hidden"></div>
+<section class="card syncbar"><div class="sync-info"><div class="sync-icon">↻</div><div><div class="updated" id="updatedText">Last updated: —</div><div class="source"><span id="statusDot" class="status-dot"></span><span id="statusText">Loading tracker data…</span></div></div></div><button id="refreshBtn" class="refresh"><span class="refresh-icon">↻</span> Refresh data</button></section>
+<section class="card student-panel"><h2 class="section-title">🍁 Select student</h2><div id="studentTabs" class="student-tabs"></div></section>
+<section class="card overview"><div class="profile"><div class="avatar">🦔</div><div class="student-name" id="studentName">—</div><span id="levelBadge" class="level-badge">English</span><div id="profileMeta" class="profile-meta"></div><div id="teacherLine" class="teacher"></div></div><div class="metrics"><div class="metric"><div class="metric-label">Overall progress</div><div id="overallRing" class="ring"><strong id="ringValue">—</strong></div><div class="metric-note">🍂 Well done!</div></div><div class="metric"><div class="metric-label">Homework</div><div id="homeworkValue" class="big-metric homework-val">—</div><div id="homeworkNote" class="metric-note">Waiting for data</div></div><div class="metric"><div class="metric-label">Attendance</div><div id="attendanceValue" class="big-metric attendance-val">—</div><div id="attendanceNote" class="metric-note">Waiting for data</div></div></div></section>
+<section class="card journey-card"><h2 class="section-title">🍂 Test journey</h2><div id="testsGrid" class="journey"></div><div class="journey-hint">Click a completed test to see the skills breakdown ↗</div><div id="testDetail" class="detail"></div></section>
+<section class="card skills-card"><h2 class="section-title">🍁 Skills snapshot</h2><div id="skillsGrid" class="skills-grid"></div></section>
+<footer class="footer">JollyEnglish Progress Tracker &nbsp; <span class="leaf">🍂</span> &nbsp; Small steps. Big adventures. &nbsp; 🍄</footer>
+</main>
+<script>
+const CSV_URL='./data.csv';
+const AUTO_REFRESH_MS=5*60*1000;
+const SKILLS=['Listening','Writing','Reading','Speaking','Grammar','Vocabulary'];
+const TESTS=['Test 1','Test 2','Test 3','Test 4','End of the year test'];
+let students=[],activeStudent=null;
+const $=id=>document.getElementById(id);
+const normalize=s=>String(s??'').trim().toLowerCase().replace(/[%]/g,'').replace(/[_\-]+/g,' ').replace(/\s+/g,' ');
+
+function parseCSV(text){const rows=[];let row=[],field='',quoted=false;for(let i=0;i<text.length;i++){const c=text[i],n=text[i+1];if(quoted){if(c==='"'&&n==='"'){field+='"';i++}else if(c==='"')quoted=false;else field+=c}else{if(c==='"')quoted=true;else if(c===','){row.push(field);field=''}else if(c==='\n'){row.push(field);rows.push(row);row=[];field=''}else if(c!=='\r')field+=c}}if(field.length||row.length){row.push(field);rows.push(row)}return rows.filter(r=>r.some(v=>String(v).trim()!==''))}
+function toPercent(v){if(v==null||String(v).trim()==='')return null;let s=String(v).trim().replace(',','.').replace('%','');let n=Number(s);if(!Number.isFinite(n))return null;if(n>=0&&n<=1&&!String(v).includes('%'))n*=100;return Math.max(0,Math.min(100,Math.round(n*10)/10))}
+function firstValue(row,start=1){for(let i=start;i<row.length;i++){const v=String(row[i]??'').trim();if(v)return v}return ''}
+function canonicalTest(v,fallbackIndex=0){const n=normalize(v);if(/end|final|year/.test(n))return 'End of the year test';const m=n.match(/(?:test|checkpoint|milestone)?\s*([1-4])/);if(m)return `Test ${m[1]}`;return TESTS[fallbackIndex]||String(v||'Test 1')}
+function average(arr){const nums=arr.filter(v=>Number.isFinite(v));return nums.length?Math.round(nums.reduce((a,b)=>a+b,0)/nums.length*10)/10:null}
+
+// Parser for the user's real Google Sheet layout:
+// labels in column A, student blocks stacked vertically, tests spread across columns B-F.
+function parseVerticalBlocks(rows){
+  const labels=rows.map(r=>normalize(r[0]));
+  const studentRows=[];labels.forEach((v,i)=>{if(v==='student'||v==='student name')studentRows.push(i)});
+  if(!studentRows.length)return [];
+
+  const getMeta=(names)=>{for(let i=0;i<rows.length;i++){if(names.includes(labels[i])){const v=firstValue(rows[i]);if(v)return v}}return ''};
+  const meta={level:getMeta(['cefr','level']),teacher:getMeta(['teacher']),group:getMeta(['group','class'])};
+  const out=[];
+
+  studentRows.forEach((start,idx)=>{
+    const end=idx+1<studentRows.length?studentRows[idx+1]:rows.length;
+    const block=rows.slice(start,end);
+    const name=firstValue(rows[start]);
+    if(!name||['student','name'].includes(normalize(name)))return;
+    const byLabel={};
+    block.forEach(r=>{const k=normalize(r[0]);if(k&&!byLabel[k])byLabel[k]=r});
+    const pick=(...keys)=>keys.map(k=>byLabel[normalize(k)]).find(Boolean);
+    const testRow=pick('test number','test','checkpoint','milestone');
+    const dateRow=pick('test date','date');
+    const hwRow=pick('homework tracker','homework','hw');
+    const atRow=pick('class attendance','attendance','attend');
+    const skillRows=Object.fromEntries(SKILLS.map(s=>[s,pick(s)]));
+    const maxCols=Math.max(...block.map(r=>r.length),1);
+    const st={name,group:meta.group,level:meta.level,teacher:meta.teacher,homework:null,attendance:null,tests:{},testDates:{}};
+
+    for(let c=1;c<maxCols;c++){
+      const rawTest=String(testRow?.[c]??'').trim();
+      const hasAnySkill=SKILLS.some(s=>toPercent(skillRows[s]?.[c])!==null);
+      const date=String(dateRow?.[c]??'').trim();
+      if(!rawTest&&!hasAnySkill&&!date)continue;
+      const testName=canonicalTest(rawTest,c-1);
+      if(!st.tests[testName])st.tests[testName]={};
+      SKILLS.forEach(skill=>{const v=toPercent(skillRows[skill]?.[c]);if(v!==null)st.tests[testName][skill]=v});
+      if(date)st.testDates[testName]=date;
+      const hw=toPercent(hwRow?.[c]);if(hw!==null)st.homework=hw;
+      const at=toPercent(atRow?.[c]);if(at!==null)st.attendance=at;
+    }
+    // If homework/attendance are stored only once outside the test columns, still take the latest non-empty value.
+    if(hwRow){for(let c=1;c<hwRow.length;c++){const v=toPercent(hwRow[c]);if(v!==null)st.homework=v}}
+    if(atRow){for(let c=1;c<atRow.length;c++){const v=toPercent(atRow[c]);if(v!==null)st.attendance=v}}
+    out.push(st);
+  });
+  return out;
+}
+
+// Fallback for a conventional table layout, so the tracker remains reusable.
+function detectHeaderRow(rows){let best=0,bestScore=-1;rows.slice(0,12).forEach((r,i)=>{const joined=r.map(normalize).join('|');let s=0;['student','listening','writing','reading','speaking','grammar','vocabulary','test'].forEach(k=>{if(joined.includes(k))s++});if(s>bestScore){bestScore=s;best=i}});return best}
+function findColumn(headers,cands){const hs=headers.map(normalize);for(const c of cands){let i=hs.findIndex(h=>h===normalize(c));if(i>=0)return i}return -1}
+function parseConventional(rows){const hi=detectHeaderRow(rows),h=rows[hi].map(String),data=rows.slice(hi+1),nameIdx=findColumn(h,['student','student name','name']),testIdx=findColumn(h,['test number','test','checkpoint']);if(nameIdx<0)return[];const skillIdx=Object.fromEntries(SKILLS.map(s=>[s,findColumn(h,[s])])),dateIdx=findColumn(h,['test date','date']),hwIdx=findColumn(h,['homework tracker','homework']),atIdx=findColumn(h,['class attendance','attendance']),map=new Map();data.forEach(r=>{const name=String(r[nameIdx]??'').trim();if(!name)return;if(!map.has(name))map.set(name,{name,group:'',level:'',teacher:'',homework:null,attendance:null,tests:{},testDates:{}});const st=map.get(name),tn=canonicalTest(testIdx>=0?r[testIdx]:'Test 1');st.tests[tn]??={};SKILLS.forEach(s=>{const v=skillIdx[s]>=0?toPercent(r[skillIdx[s]]):null;if(v!==null)st.tests[tn][s]=v});if(dateIdx>=0&&r[dateIdx])st.testDates[tn]=String(r[dateIdx]);const hw=hwIdx>=0?toPercent(r[hwIdx]):null,at=atIdx>=0?toPercent(r[atIdx]):null;if(hw!==null)st.homework=hw;if(at!==null)st.attendance=at});return[...map.values()]}
+function convertRows(rows){const vertical=parseVerticalBlocks(rows);if(vertical.length)return vertical;return parseConventional(rows)}
+
+function testAverage(o){return average(SKILLS.map(s=>o?.[s]).filter(Number.isFinite))}
+function overall(st){const vals=TESTS.map(t=>testAverage(st.tests[t]||{})).filter(Number.isFinite);return average(vals)}
+function latestSkill(st,skill){for(let i=TESTS.length-1;i>=0;i--){const v=st.tests[TESTS[i]]?.[skill];if(Number.isFinite(v))return v}return null}
+function fmt(v){return Number.isFinite(v)?`${Math.round(v*10)/10}%`:'—'}
+function color(v){if(!Number.isFinite(v))return'#d8d0be';if(v>=85)return'var(--olive)';if(v>=70)return'var(--moss)';if(v>=55)return'var(--pumpkin)';return'var(--rust)'}
+function mascotMessage(v){if(!Number.isFinite(v))return'Ready for another small step?';if(v>=90)return'What a brilliant adventure!';if(v>=80)return'Great journey — keep going!';if(v>=70)return'Nice progress. Keep exploring!';if(v>=55)return'One small step at a time.';return'Practice grows into progress.'}
+function statusWord(v){if(!Number.isFinite(v))return'Waiting for data';if(v>=85)return'Excellent';if(v>=70)return'Good progress';if(v>=55)return'Keep going';return'Next small step'}
+function avatarFor(name,idx){const a=['🦔','🦊','🐻','🐰','🐿️','🦉','🐦'];return a[idx%a.length]}
+function renderTabs(){ $('studentTabs').innerHTML='';students.forEach((st,idx)=>{const b=document.createElement('button');b.className='student-btn'+(st===activeStudent?' active':'');b.innerHTML=`<span class="student-animal">${avatarFor(st.name,idx)}</span><span>${st.name}</span>`;b.onclick=()=>{activeStudent=st;render()};$('studentTabs').appendChild(b)}) }
+function renderTests(st){$('testsGrid').innerHTML=TESTS.map((t,i)=>{const avg=testAverage(st.tests[t]||{}),empty=!Number.isFinite(avg),date=st.testDates?.[t]||'';return `<article class="test-stop ${empty?'empty':'clickable'}" ${empty?'':`data-test="${t}"`}>
+<div class="test-node"><span>${empty?(i+1):'✓'}</span></div><div class="test-name">${t==='End of the year test'?'End-of-year<br>checkpoint':t}</div><div class="test-date">${date||'—'}</div><div class="test-score">${fmt(avg)}</div></article>`}).join('');document.querySelectorAll('.test-stop.clickable').forEach(el=>el.onclick=()=>showTestDetail(st,el.dataset.test))}
+function showTestDetail(st,test){const d=$('testDetail'),obj=st.tests[test]||{},date=st.testDates?.[test]||'';d.innerHTML=`<div class="detail-title">${test}${date?` · ${date}`:''}</div><div class="detail-grid">${SKILLS.map(s=>`<div class="detail-item"><span class="detail-skill">${s}</span><strong>${fmt(obj[s])}</strong><div class="tiny-track"><span style="width:${obj[s]||0}%;background:${color(obj[s])}"></span></div></div>`).join('')}</div>`;d.classList.add('open')}
+function renderSkills(st){const icons={Listening:'🎧',Reading:'📖',Writing:'✏️',Speaking:'💬',Grammar:'🧩',Vocabulary:'🍂'};$('skillsGrid').innerHTML=SKILLS.map(s=>{const v=latestSkill(st,s);return `<article class="skill-card"><div class="skill-top"><span class="skill-icon">${icons[s]}</span><span class="skill-name">${s}</span></div><div class="skill-score">${fmt(v)}</div><div class="skill-track"><span style="width:${v||0}%;background:${color(v)}"></span></div><div class="skill-label">${statusWord(v)}</div></article>`}).join('')}
+function setRing(v){const n=Number.isFinite(v)?v:0;$('overallRing').style.setProperty('--pct',n);$('ringValue').textContent=fmt(v)}
+function render(){renderTabs();if(!activeStudent)return;const st=activeStudent,v=overall(st);$('studentName').textContent=st.name;$('profileMeta').textContent=[st.group,st.level].filter(Boolean).join(' · ')||'English learner';$('levelBadge').textContent=st.level||'English';$('teacherLine').textContent=st.teacher?`Teacher: ${st.teacher}`:'JollyEnglish';$('homeworkValue').textContent=fmt(st.homework);$('attendanceValue').textContent=fmt(st.attendance);$('homeworkNote').textContent=statusWord(st.homework);$('attendanceNote').textContent=statusWord(st.attendance);$('mascotSpeech').textContent=mascotMessage(v);$('testDetail').classList.remove('open');setRing(v);renderTests(st);renderSkills(st)}
+function showError(msg){$('errorBox').textContent=msg;$('errorBox').classList.remove('hidden');$('statusDot').classList.add('error');$('statusText').textContent='Could not load tracker data'}
+function clearError(){$('errorBox').classList.add('hidden');$('statusDot').classList.remove('error')}
+async function loadData({silent=false}={}){const btn=$('refreshBtn');btn.classList.add('loading');btn.disabled=true;if(!silent)$('statusText').textContent='Loading latest data…';clearError();try{const r=await fetch(CSV_URL+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error(`data.csv is not available (HTTP ${r.status}).`);const rows=parseCSV(await r.text()),parsed=convertRows(rows);if(!parsed.length)throw new Error('No student blocks were recognized in data.csv.');const prev=activeStudent?.name;students=parsed;activeStudent=students.find(s=>s.name===prev)||students[0];render();$('statusText').textContent='Data from Google Sheets';$('updatedText').textContent='Last updated: '+new Date().toLocaleString([],{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}catch(e){console.error(e);showError(e.message)}finally{btn.classList.remove('loading');btn.disabled=false}}
+$('refreshBtn').onclick=()=>loadData();loadData();setInterval(()=>loadData({silent:true}),AUTO_REFRESH_MS);
+</script>
+</body>
+</html>
