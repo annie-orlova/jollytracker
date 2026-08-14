@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>JollyEnglish · Learning Journey Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f8f1e5;--paper:#fffdf8;--paper-2:#fff9ef;--ink:#3e271b;--muted:#7c695b;
+  --line:#eadbc5;--olive:#768c3d;--olive-2:#9baa66;--moss:#536b34;
+  --orange:#e87822;--rust:#c95424;--gold:#dda955;--soft:#f4ead9;
+  --shadow:0 14px 38px rgba(86,58,32,.10);--radius:26px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:
+  radial-gradient(circle at 8% 0%,rgba(239,177,75,.13),transparent 30rem),
+  radial-gradient(circle at 92% 8%,rgba(117,140,61,.08),transparent 26rem),
+  linear-gradient(180deg,#fffaf1 0%,#f7efe2 100%);
+  color:var(--ink);font-family:"DM Sans","Segoe UI",sans-serif}
+button{font:inherit}
+.app{width:min(1180px,calc(100% - 28px));margin:0 auto;padding:15px 0 34px}
+.card{background:rgba(255,253,248,.96);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+
+/* HERO */
+.hero{position:relative;min-height:385px;overflow:hidden;display:grid;grid-template-columns:1.08fr .92fr;align-items:center;padding:36px 40px;background:linear-gradient(135deg,#fffdf8,#fff8ec);border:1px solid #ead8bd;border-radius:30px;box-shadow:var(--shadow)}
+.hero-copy{position:relative;z-index:3;align-self:start;padding-top:4px}
+.brand{display:inline-flex;align-items:center;gap:9px;padding:8px 14px;background:rgba(255,253,248,.88);border:1px solid #e8d3b5;border-radius:999px;font-weight:800;color:#71361f}
+.brand svg{width:19px;height:19px}
+.hero h1{margin:19px 0 11px;max-width:590px;font:700 clamp(47px,6vw,72px)/.97 "Fraunces",Georgia,serif;letter-spacing:-.04em}
+.hero-copy>p{max-width:570px;margin:0;color:#6f5c4e;font-size:15px;line-height:1.6}
+.motto{margin-top:20px;display:flex;align-items:center;gap:9px;color:var(--rust);font:600 17px "Fraunces",Georgia,serif}
+.motto svg{width:19px;height:19px}
+.hero-art{position:relative;height:305px;z-index:2}
+.hedgehog{position:absolute;width:330px;max-width:76%;height:auto;left:7%;bottom:10px;filter:drop-shadow(0 14px 15px rgba(90,56,30,.08))}
+.speech{position:absolute;right:1%;top:37%;width:190px;padding:16px 17px;background:#fffdf9;border:1px solid #e6d3b6;border-radius:25px;text-align:center;font-weight:700;line-height:1.35;box-shadow:0 10px 24px rgba(85,54,28,.08)}
+.speech:before{content:"";position:absolute;width:15px;height:15px;left:-8px;top:38%;background:#fffdf9;border-left:1px solid #e6d3b6;border-bottom:1px solid #e6d3b6;transform:rotate(45deg)}
+.branch{position:absolute;right:-25px;top:-15px;width:255px;height:150px;z-index:1}
+.ground{position:absolute;left:0;right:0;bottom:0;height:87px;pointer-events:none}
+.hero-leaf{position:absolute;z-index:1;opacity:.95}.hl1{left:44%;top:34%;width:30px;transform:rotate(17deg)}.hl2{left:37%;bottom:40px;width:25px;transform:rotate(-26deg)}.hl3{right:28%;bottom:35px;width:22px;transform:rotate(18deg)}
+
+/* SYNC */
+.syncbar{margin:14px 0;padding:13px 18px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.sync-left{display:flex;align-items:center;gap:12px}.sync-badge{width:40px;height:40px;border:1px solid #e6d2b5;border-radius:50%;display:grid;place-items:center;color:#6e442d;background:#fffaf3}.sync-badge svg{width:19px;height:19px}
+.updated{font-size:13px;font-weight:800}.source{margin-top:2px;color:var(--muted);font-size:11px}.source-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--olive);margin-right:6px}.source-dot.error{background:var(--rust)}
+.refresh{display:flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:11px 18px;background:linear-gradient(180deg,#8ea550,#6f8737);color:#fff;font-weight:800;box-shadow:0 8px 18px rgba(91,112,48,.22);cursor:pointer;transition:.18s}.refresh:hover{transform:translateY(-1px)}.refresh:disabled{opacity:.65;cursor:wait}.refresh.loading svg{animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+
+/* SELECTOR */
+.students{padding:20px 22px;margin-bottom:14px}.section-title{display:flex;align-items:center;gap:9px;margin:0 0 15px;font:600 22px "Fraunces",Georgia,serif}.section-title svg{width:21px;height:21px}.student-tabs{display:flex;gap:12px;flex-wrap:wrap}.student-btn{min-width:130px;padding:11px 16px;border:1px solid #ead9c1;border-radius:15px;background:#fffdf9;color:var(--ink);display:flex;align-items:center;justify-content:center;gap:10px;font-weight:700;cursor:pointer;transition:.18s}.student-btn:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(79,52,30,.07)}.student-btn.active{border-color:#748d3d;background:#f4f6e6;box-shadow:inset 0 0 0 1px #748d3d}.student-dot{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#f4ead6;border:1px solid #dfc9a6;font:700 16px "Fraunces",Georgia,serif;color:#6d3a22}
+
+/* OVERVIEW */
+.overview{display:grid;grid-template-columns:1.05fr 1.95fr;overflow:hidden;margin-bottom:14px}.profile{position:relative;min-height:230px;padding:26px 28px;background:linear-gradient(135deg,#f3f0d9,#fffdf8)}.mini-hog{width:82px;height:82px;border:1px solid #ead7bd;border-radius:50%;display:grid;place-items:center;background:#fff;overflow:hidden;box-shadow:0 8px 18px rgba(85,55,30,.08)}.mini-hog svg{width:72px;height:72px}.student-name{margin:14px 0 6px;font:700 36px/1 "Fraunces",Georgia,serif}.level{display:inline-flex;padding:5px 11px;border-radius:999px;background:var(--olive);color:#fff;font-size:12px;font-weight:800}.profile-meta{margin-top:8px;color:var(--muted);font-size:12px}.teacher{margin-top:4px;color:#674b3a;font-size:12px}.profile-decor{position:absolute;left:18px;bottom:7px;width:102px;height:57px}
+.progress-panel{display:grid;grid-template-columns:.9fr 1.1fr;background:#fffdf8}.overall{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;border-left:1px solid #eee1d0}.label{font:600 16px "Fraunces",Georgia,serif}.ring{--pct:0;width:118px;height:118px;margin:14px auto 8px;border-radius:50%;display:grid;place-items:center;position:relative;background:conic-gradient(var(--olive) calc(var(--pct)*1%),#ebe6d5 0)}.ring:before{content:"";position:absolute;inset:14px;border-radius:50%;background:#fffdf8}.ring strong{position:relative;z-index:1;font-size:29px}.ring-note{font-size:12px;color:#665141;font-weight:700}.latest{padding:24px 26px;border-left:1px solid #eee1d0;display:flex;flex-direction:column;justify-content:center}.latest-kicker{color:var(--muted);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.09em}.latest-name{margin-top:6px;font:600 25px "Fraunces",Georgia,serif}.latest-date{margin-top:4px;color:var(--muted);font-size:12px}.latest-score{margin-top:14px;font-size:40px;font-weight:800;color:var(--olive)}.latest-caption{color:#695443;font-size:12px}
+
+/* JOURNEY */
+.journey-card,.skills-card{padding:21px 24px;margin-bottom:14px;position:relative;overflow:hidden}.journey{position:relative;display:grid;grid-template-columns:repeat(5,1fr);padding:15px 25px 6px}.journey:before{content:"";position:absolute;left:10%;right:10%;top:42px;height:2px;background:#9ba66f}.test-stop{position:relative;z-index:2;text-align:center;padding:0 8px}.test-node{width:49px;height:49px;margin:0 auto 9px;border:2px solid #cdbfa9;border-radius:50%;display:grid;place-items:center;background:#f5eee1;color:#978975;font-weight:900;transition:.18s}.test-stop.done{cursor:pointer}.test-stop.done .test-node{background:linear-gradient(180deg,#9aac5b,#758b3d);border-color:#71873b;color:#fff;box-shadow:0 5px 13px rgba(81,105,49,.18)}.test-stop.done:hover .test-node{transform:translateY(-2px)}.test-stop.final.done .test-node{background:#fff2dc;border-color:var(--orange);color:var(--rust)}.test-name{min-height:34px;font-size:13px;font-weight:800}.test-date{margin-top:3px;color:var(--muted);font-size:11px}.test-score{margin-top:5px;color:var(--olive);font-size:12px;font-weight:800}.journey-hint{text-align:center;color:#765e4c;font-size:12px;margin-top:7px}.mushroom-art{position:absolute;right:5px;bottom:-5px;width:125px;height:130px;opacity:.96;pointer-events:none}.detail{display:none;margin:15px 8px 0;padding:15px;border:1px dashed #d9c6a8;border-radius:18px;background:#fcf7ed}.detail.open{display:block}.detail-top{display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:11px}.detail-title{font-weight:800}.detail-date{font-size:11px;color:var(--muted)}.detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.detail-item{padding:10px;border:1px solid #eadbc5;border-radius:12px;background:#fffdf8}.detail-skill{display:block;color:var(--muted);font-size:10px;font-weight:800}.detail-item strong{display:block;margin-top:3px}.tiny{height:6px;margin-top:7px;background:#eee6d8;border-radius:99px;overflow:hidden}.tiny span{display:block;height:100%;border-radius:99px}
+
+/* SKILLS */
+.skills-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.skill{padding:15px 12px;border:1px solid #eadbc5;border-radius:16px;background:#fffdf8;text-align:center}.skill-icon{width:34px;height:34px;margin:0 auto 7px;display:grid;place-items:center;border-radius:50%;background:#f6ecdb;color:#774229}.skill-icon svg{width:20px;height:20px}.skill-name{font-size:12px;font-weight:800}.skill-score{margin:8px 0 7px;font-size:22px;font-weight:800}.skill-track{height:7px;background:#eee6d8;border-radius:99px;overflow:hidden}.skill-track span{display:block;height:100%;border-radius:99px}.skill-word{margin-top:7px;color:#6d5949;font-size:10px}.footer{text-align:center;color:#745f4d;font-size:11px;padding:5px}.error{margin:12px 0;padding:12px 14px;border:1px solid #e4b9a3;border-radius:14px;background:#fff2e8;color:#8a3f24;font-size:12px}.hidden{display:none!important}
+
+@media(max-width:900px){.hero{grid-template-columns:1fr;min-height:auto}.hero-art{height:270px}.overview{grid-template-columns:1fr}.progress-panel{border-top:1px solid var(--line)}.overall:first-child{border-left:0}.skills-grid{grid-template-columns:repeat(3,1fr)}.journey{padding-inline:0}.mushroom-art{display:none}}
+@media(max-width:650px){.app{width:min(100% - 14px,1180px);padding-top:7px}.hero{padding:24px 18px}.hero h1{font-size:46px}.hero-art{height:225px}.hedgehog{left:0;max-width:73%}.speech{right:0;width:145px;font-size:11px}.syncbar{align-items:flex-start}.student-btn{min-width:auto;padding:9px 11px}.overview{display:block}.progress-panel{grid-template-columns:1fr}.latest,.overall{border-left:0;border-top:1px solid #eee1d0}.latest:first-child{border-top:0}.journey{grid-template-columns:repeat(2,1fr);gap:21px}.journey:before{display:none}.test-stop.final{grid-column:1/-1}.detail-grid{grid-template-columns:repeat(2,1fr)}.skills-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<main class="app">
+<header class="hero">
+  <div class="hero-copy">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.7 3.8C13 4.1 8.3 7 6 11.7c-1.8 3.8-.7 7.3 1.2 8.9 2.2-1 4.7-3.7 6.4-6.6-2.2.9-4 1.9-5.6 3.2 1.7-2.7 4.3-4.9 7.4-6.5-1.2 3.1-2.7 5.5-4.6 7.5 4.5-1.5 7.8-6.5 7.9-14.4Z" fill="#e87822" stroke="#803a20" stroke-width="1.1" stroke-linejoin="round"/></svg>
+      JollyEnglish
+    </div>
+    <h1>Learning journey<br>tracker</h1>
+    <p>See progress, celebrate wins and notice the next small step.<br>Your Google Sheet stays the source of truth.</p>
+    <div class="motto"><svg viewBox="0 0 24 24"><path d="M18.7 3.8C13 4.1 8.3 7 6 11.7c-1.8 3.8-.7 7.3 1.2 8.9 2.2-1 4.7-3.7 6.4-6.6-2.2.9-4 1.9-5.6 3.2 1.7-2.7 4.3-4.9 7.4-6.5-1.2 3.1-2.7 5.5-4.6 7.5 4.5-1.5 7.8-6.5 7.9-14.4Z" fill="#d85c23"/></svg>Small steps. Big adventures.</div>
+  </div>
+  <div class="hero-art">
+    <svg class="hedgehog" viewBox="0 0 330 300" role="img" aria-label="JollyEnglish hedgehog mascot">
+      <g fill="none" stroke="#33261f" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M121 39c-43 7-76 44-82 96-5 48 11 99 47 127 33 26 79 23 106-4 24-24 32-66 28-109-4-48-21-86-49-103-15-9-31-11-50-7Z" fill="#c9a777" stroke-width="4"/>
+        <g stroke-width="5"><path d="m106 49-14 23m38-28-8 27M84 62 68 80m89-31-9 24M68 80 52 94m111-22-10 25M57 103l-15 9m126-11-11 25M52 129l-13 5m128-4-11 25M53 158l-14 1m117 1-10 22M64 188l-13-2m85 3-5 22M81 218l-11-4"/></g>
+        <path d="M143 66c29-4 62 10 80 36 18 26 19 65 12 97-7 32-24 63-47 72-21 8-41-4-42-26-1-25 14-51 13-82-1-37-19-76-16-97Z" fill="#f3d8aa" stroke-width="4"/>
+        <path d="M218 112c28 0 52 12 70 28-21 9-42 11-63 8" fill="#f3d8aa" stroke-width="4"/>
+        <circle cx="288" cy="140" r="6" fill="#33261f" stroke="none"/><circle cx="198" cy="103" r="5" fill="#33261f" stroke="none"/>
+        <path d="M222 149c9 8 20 8 28 0" stroke-width="4"/><path d="M171 252c-3 18-1 31 8 40m38-42c5 18 6 30 4 41" stroke-width="6"/><path d="M180 292c-11 4-20 2-24-1m67 1c11 4 19 2 24-1" stroke-width="5"/>
+        <path d="M223 191c12 7 18 18 19 31" stroke-width="5"/><path d="m245 205 27-18 17 41-29 16Z" fill="#83994c" stroke-width="4"/><path d="m258 196 11 39" stroke="#fff8e8" stroke-width="3"/>
+        <path d="M150 203c-10-1-18 3-24 11" stroke-width="5"/>
+      </g>
+      <g opacity=".25" fill="#9f7549"><circle cx="92" cy="88" r="3"/><circle cx="82" cy="148" r="3"/><circle cx="110" cy="181" r="3"/><circle cx="126" cy="115" r="2.5"/></g>
+    </svg>
+    <div class="speech" id="mascotSpeech">Ready for another small step?</div>
+  </div>
+  <svg class="branch" viewBox="0 0 260 160" aria-hidden="true"><path d="M260 5c-55 14-78 34-115 68-24 22-50 35-89 45" fill="none" stroke="#6e4129" stroke-width="5" stroke-linecap="round"/><g fill="#e56523" stroke="#7e3a24" stroke-width="1.6"><path d="M211 15c-18 4-27 16-28 33 17-1 29-10 35-26Z"/><path d="M166 42c-18 4-27 16-28 33 17-1 29-10 35-26Z"/><path d="M121 76c-17 3-26 13-29 29 17 0 29-7 36-22Z"/></g><g fill="#d79327" stroke="#7e4a23" stroke-width="1.5"><path d="M233 31c-5 17-1 30 12 40 8-15 7-29-3-42Z"/><path d="M186 61c-5 17-1 30 12 40 8-15 7-29-3-42Z"/></g></svg>
+  <svg class="hero-leaf hl1" viewBox="0 0 30 30"><path d="M25 4C15 3 8 7 5 16c-2 6 1 10 5 11 5-3 10-9 12-16-4 2-8 4-11 7 3-5 8-9 14-11Z" fill="#e56c24" stroke="#814127" stroke-width="1.2"/></svg>
+  <svg class="hero-leaf hl2" viewBox="0 0 30 30"><path d="M25 4C15 3 8 7 5 16c-2 6 1 10 5 11 5-3 10-9 12-16-4 2-8 4-11 7 3-5 8-9 14-11Z" fill="#d9992e" stroke="#814127" stroke-width="1.2"/></svg>
+  <svg class="hero-leaf hl3" viewBox="0 0 30 30"><path d="M25 4C15 3 8 7 5 16c-2 6 1 10 5 11 5-3 10-9 12-16-4 2-8 4-11 7 3-5 8-9 14-11Z" fill="#7b923e" stroke="#52662f" stroke-width="1.2"/></svg>
+  <svg class="ground" viewBox="0 0 1180 90" preserveAspectRatio="none" aria-hidden="true"><path d="M0 76c190-15 298 7 430-3 205-16 297-7 432 0 149 7 229-10 318-6" fill="none" stroke="#e9d4af" stroke-width="2"/><g fill="#d65c25"><ellipse cx="70" cy="71" rx="17" ry="5" transform="rotate(-20 70 71)"/><ellipse cx="455" cy="72" rx="15" ry="4" transform="rotate(17 455 72)"/><ellipse cx="804" cy="74" rx="14" ry="4" transform="rotate(-15 804 74)"/></g><g transform="translate(28 37)"><path d="M18 38V18" stroke="#74522f" stroke-width="3"/><path d="M5 20C8 5 29 5 34 20Z" fill="#c84c24" stroke="#78402b" stroke-width="2"/><rect x="14" y="20" width="9" height="20" rx="4" fill="#ead2a6"/></g><g transform="translate(1080 30)"><path d="M25 45V19" stroke="#74522f" stroke-width="3"/><path d="M6 21C10 2 37 2 43 21Z" fill="#d88329" stroke="#78402b" stroke-width="2"/><rect x="19" y="21" width="11" height="25" rx="5" fill="#ead2a6"/></g></svg>
+</header>
+
+<div id="errorBox" class="error hidden"></div>
+<section class="card syncbar">
+  <div class="sync-left"><div class="sync-badge"><svg viewBox="0 0 24 24"><path d="M19 8a7.5 7.5 0 1 0 1 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="m19 3 .2 5-5-.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="updated" id="updatedText">Last updated: —</div><div class="source"><span id="statusDot" class="source-dot"></span><span id="statusText">Loading tracker data…</span></div></div></div>
+  <button class="refresh" id="refreshBtn" type="button"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M19 8a7.5 7.5 0 1 0 1 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="m19 3 .2 5-5-.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Refresh data</button>
+</section>
+
+<section class="card students"><h2 class="section-title"><svg viewBox="0 0 24 24"><path d="M18.7 3.8C13 4.1 8.3 7 6 11.7c-1.8 3.8-.7 7.3 1.2 8.9 2.2-1 4.7-3.7 6.4-6.6-2.2.9-4 1.9-5.6 3.2 1.7-2.7 4.3-4.9 7.4-6.5-1.2 3.1-2.7 5.5-4.6 7.5 4.5-1.5 7.8-6.5 7.9-14.4Z" fill="#e87822" stroke="#7b3a22" stroke-width="1"/></svg>Select student</h2><div class="student-tabs" id="studentTabs"></div></section>
+
+<section class="card overview">
+  <div class="profile">
+    <div class="mini-hog"><svg viewBox="0 0 80 80"><path d="M34 10C18 13 8 29 10 47c2 17 14 28 29 27 16-1 27-16 26-34C64 22 51 7 34 10Z" fill="#c6a377" stroke="#38271f" stroke-width="2"/><path d="M37 20c13-2 25 6 29 18 4 12-1 26-10 31-9 5-18 0-17-10 1-11 5-18 3-28-1-5-3-8-5-11Z" fill="#f1d5aa" stroke="#38271f" stroke-width="2"/><path d="M64 37c7 0 12 3 16 7-5 2-10 3-15 2" fill="#f1d5aa" stroke="#38271f" stroke-width="2"/><circle cx="78" cy="44" r="2.2" fill="#38271f"/><circle cx="55" cy="32" r="2" fill="#38271f"/><path d="M57 48c3 3 7 3 9 0" fill="none" stroke="#38271f" stroke-width="2" stroke-linecap="round"/><g stroke="#38271f" stroke-width="2" stroke-linecap="round"><path d="m31 14-5 7m1 0-7 5m5 2-7 4m8 4-8 2m10 5-8 0m12 7-7 3"/></g></svg></div>
+    <h2 class="student-name" id="studentName">—</h2><span class="level" id="levelBadge">English</span><div class="profile-meta" id="profileMeta"></div><div class="teacher" id="teacherLine"></div>
+    <svg class="profile-decor" viewBox="0 0 110 60"><path d="M22 57c-2-19 5-34 18-48" fill="none" stroke="#65783a" stroke-width="3"/><path d="M31 31c-14-2-20 5-21 17 13 1 20-5 21-17Zm7-12c11-2 17 2 19 11-10 2-17-2-19-11Z" fill="#7d9346"/><path d="M61 57c0-16 7-28 17-38" fill="none" stroke="#bd6927" stroke-width="2.5"/><path d="M69 38c-11-1-16 5-16 14 10 1 16-4 16-14Zm8-10c9-1 14 3 15 10-9 1-14-2-15-10Z" fill="#d97928"/></svg>
+  </div>
+  <div class="progress-panel"><div class="overall"><div class="label">Overall progress</div><div class="ring" id="overallRing"><strong id="ringValue">—</strong></div><div class="ring-note" id="overallNote">Your learning journey</div></div><div class="latest"><div class="latest-kicker">Latest checkpoint</div><div class="latest-name" id="latestName">—</div><div class="latest-date" id="latestDate"></div><div class="latest-score" id="latestScore">—</div><div class="latest-caption" id="latestCaption">Waiting for results</div></div></div>
+</section>
+
+<section class="card journey-card"><h2 class="section-title"><svg viewBox="0 0 24 24"><path d="M18.7 3.8C13 4.1 8.3 7 6 11.7c-1.8 3.8-.7 7.3 1.2 8.9 2.2-1 4.7-3.7 6.4-6.6-2.2.9-4 1.9-5.6 3.2 1.7-2.7 4.3-4.9 7.4-6.5-1.2 3.1-2.7 5.5-4.6 7.5 4.5-1.5 7.8-6.5 7.9-14.4Z" fill="#d65b23"/></svg>Test journey</h2><div class="journey" id="testsGrid"></div><div class="journey-hint">Click a completed test to see the skills breakdown</div><div class="detail" id="testDetail"></div>
+<svg class="mushroom-art" viewBox="0 0 130 135"><g stroke="#66402b" stroke-width="2" stroke-linejoin="round"><path d="M73 125c-8-21-5-40 3-58l19 2c2 21 3 39 13 56Z" fill="#ead3aa"/><path d="M49 68c8-29 43-42 69-17 6 6 10 14 11 22-32-5-51-4-80-5Z" fill="#a9612d"/><path d="M19 126c-4-13-3-25 1-37l13 1c1 13 2 24 7 36Z" fill="#ead3aa"/><path d="M6 91c5-18 27-25 41-10 3 3 5 8 6 12-19-4-30-3-47-2Z" fill="#dd7626"/></g></svg></section>
+
+<section class="card skills-card"><h2 class="section-title"><svg viewBox="0 0 24 24"><path d="M18.7 3.8C13 4.1 8.3 7 6 11.7c-1.8 3.8-.7 7.3 1.2 8.9 2.2-1 4.7-3.7 6.4-6.6-2.2.9-4 1.9-5.6 3.2 1.7-2.7 4.3-4.9 7.4-6.5-1.2 3.1-2.7 5.5-4.6 7.5 4.5-1.5 7.8-6.5 7.9-14.4Z" fill="#e87822"/></svg>Skills snapshot</h2><div class="skills-grid" id="skillsGrid"></div></section>
+<footer class="footer">JollyEnglish Progress Tracker &nbsp; · &nbsp; Small steps. Big adventures.</footer>
+</main>
+<script>
+const CSV_URL='./data.csv', AUTO_REFRESH_MS=5*60*1000;
+const SKILLS=['Listening','Reading','Writing','Speaking','Grammar','Vocabulary'];
+const TESTS=['Test 1','Test 2','Test 3','Test 4','End of the year test'];
+let students=[],activeIndex=0;
+const $=id=>document.getElementById(id);
+const norm=s=>String(s??'').trim().toLowerCase().replace(/[%]/g,'').replace(/[_\-]+/g,' ').replace(/\s+/g,' ');
+function parseCSV(text){const rows=[];let row=[],field='',q=false;for(let i=0;i<text.length;i++){const c=text[i],n=text[i+1];if(q){if(c==='"'&&n==='"'){field+='"';i++}else if(c==='"')q=false;else field+=c}else{if(c==='"')q=true;else if(c===','){row.push(field);field=''}else if(c==='\n'){row.push(field);rows.push(row);row=[];field=''}else if(c!=='\r')field+=c}}if(field.length||row.length){row.push(field);rows.push(row)}return rows.filter(r=>r.some(v=>String(v).trim()))}
+function pct(v){if(v==null||String(v).trim()==='')return null;let s=String(v).trim().replace(',','.').replace('%',''),n=Number(s);if(!Number.isFinite(n))return null;if(n>=0&&n<=1&&!String(v).includes('%'))n*=100;return Math.max(0,Math.min(100,Math.round(n*10)/10))}
+function firstValue(row,start=1){for(let i=start;i<row.length;i++){const v=String(row[i]??'').trim();if(v)return v}return''}
+function canon(v,fallback=0){const n=norm(v);if(/end|final|year/.test(n))return'End of the year test';const m=n.match(/(?:test|checkpoint|milestone)?\s*([1-4])/);if(m)return`Test ${m[1]}`;return TESTS[fallback]||String(v||'Test 1')}
+function avg(a){const x=a.filter(Number.isFinite);return x.length?Math.round(x.reduce((s,v)=>s+v,0)/x.length*10)/10:null}
+
+/* The published sheet uses stacked student blocks: labels in column A, checkpoints across columns B onward. */
+function parseBlocks(rows){const labels=rows.map(r=>norm(r[0])), starts=[];labels.forEach((v,i)=>{if(v==='student'||v==='student name')starts.push(i)});if(!starts.length)return[];
+ const global=(keys)=>{for(let i=0;i<rows.length;i++){if(keys.includes(labels[i])){const v=firstValue(rows[i]);if(v)return v}}return''};
+ const meta={level:global(['cefr','level']),teacher:global(['teacher']),group:global(['group','class'])};
+ return starts.map((start,idx)=>{const end=idx+1<starts.length?starts[idx+1]:rows.length,block=rows.slice(start,end),name=firstValue(rows[start]);if(!name||['student','name'].includes(norm(name)))return null;const map={};block.forEach(r=>{const k=norm(r[0]);if(k&&!map[k])map[k]=r});const get=(...keys)=>keys.map(k=>map[norm(k)]).find(Boolean);const testRow=get('test number','test','checkpoint','milestone'),dateRow=get('test date','date');const skillRows=Object.fromEntries(SKILLS.map(s=>[s,get(s)]));const max=Math.max(...block.map(r=>r.length),1);const st={name,level:meta.level,teacher:meta.teacher,group:meta.group,tests:{},dates:{}};
+   for(let c=1;c<max;c++){const raw=String(testRow?.[c]??'').trim(),date=String(dateRow?.[c]??'').trim(),has=SKILLS.some(s=>pct(skillRows[s]?.[c])!==null);if(!raw&&!date&&!has)continue;const t=canon(raw,c-1);st.tests[t]??={};SKILLS.forEach(s=>{const v=pct(skillRows[s]?.[c]);if(v!==null)st.tests[t][s]=v});if(date)st.dates[t]=date}
+   return st}).filter(Boolean)}
+function convert(rows){return parseBlocks(rows)}
+function testAvg(st,t){return avg(SKILLS.map(s=>st.tests[t]?.[s]))}
+function overall(st){return avg(TESTS.map(t=>testAvg(st,t)))}
+function latestTest(st){for(let i=TESTS.length-1;i>=0;i--){const v=testAvg(st,TESTS[i]);if(Number.isFinite(v))return{test:TESTS[i],score:v,date:st.dates[TESTS[i]]||''}}return null}
+function latestSkill(st,s){for(let i=TESTS.length-1;i>=0;i--){const v=st.tests[TESTS[i]]?.[s];if(Number.isFinite(v))return v}return null}
+function fmt(v){return Number.isFinite(v)?`${Math.round(v*10)/10}%`:'—'}
+function scoreColor(v){if(!Number.isFinite(v))return'#d8d0be';if(v>=85)return'#71873b';if(v>=70)return'#97a65b';if(v>=55)return'#e39a35';return'#c95424'}
+function word(v){if(!Number.isFinite(v))return'Not yet';if(v>=85)return'Excellent';if(v>=70)return'Good';if(v>=55)return'Keep going';return'Next step'}
+function mascot(v){if(!Number.isFinite(v))return'Ready for another small step?';if(v>=90)return'Amazing adventure — keep shining!';if(v>=80)return'Great journey. Keep exploring!';if(v>=70)return'Nice progress. Keep going!';if(v>=55)return'One small step at a time.';return'Practice grows into progress.'}
+function initials(name){return String(name).trim().split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase()||'•'}
+function icon(kind){const paths={Listening:'<path d="M5 13v-1a7 7 0 0 1 14 0v1M5 13H3v6h4v-6H5Zm14 0h2v6h-4v-6h2Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',Reading:'<path d="M4 5c3-1 5-.5 8 1v13c-3-1.5-5-2-8-1V5Zm16 0c-3-1-5-.5-8 1v13c3-1.5 5-2 8-1V5Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>',Writing:'<path d="m5 18 1-4L16 4l4 4-10 10-5 1Zm9-12 4 4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>',Speaking:'<path d="M4 5h16v11H9l-5 4V5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M8 10h.01M12 10h.01M16 10h.01" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>',Grammar:'<path d="M9 3h6v5h5v6h-5v6H9v-6H3V8h6V3Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>',Vocabulary:'<path d="M18.7 3.8C13 4.1 8.3 7 6 11.7c-1.8 3.8-.7 7.3 1.2 8.9 2.2-1 4.7-3.7 6.4-6.6-2.2.9-4 1.9-5.6 3.2 1.7-2.7 4.3-4.9 7.4-6.5-1.2 3.1-2.7 5.5-4.6 7.5 4.5-1.5 7.8-6.5 7.9-14.4Z" fill="none" stroke="currentColor" stroke-width="1.6"/>'};return`<svg viewBox="0 0 24 24">${paths[kind]||''}</svg>`}
+function renderTabs(){const box=$('studentTabs');box.innerHTML=students.map((s,i)=>`<button type="button" class="student-btn ${i===activeIndex?'active':''}" data-student-index="${i}"><span class="student-dot">${initials(s.name)}</span><span>${escapeHtml(s.name)}</span></button>`).join('')}
+function escapeHtml(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function renderTests(st){$('testsGrid').innerHTML=TESTS.map((t,i)=>{const v=testAvg(st,t),done=Number.isFinite(v);return`<article class="test-stop ${done?'done':''} ${i===4?'final':''}" ${done?`data-test-index="${i}"`:''}><div class="test-node">${done?'✓':i+1}</div><div class="test-name">${i===4?'End-of-year<br>checkpoint':t}</div><div class="test-date">${escapeHtml(st.dates[t]||'—')}</div><div class="test-score">${fmt(v)}</div></article>`}).join('')}
+function renderSkills(st){$('skillsGrid').innerHTML=SKILLS.map(s=>{const v=latestSkill(st,s);return`<article class="skill"><div class="skill-icon">${icon(s)}</div><div class="skill-name">${s}</div><div class="skill-score">${fmt(v)}</div><div class="skill-track"><span style="width:${v||0}%;background:${scoreColor(v)}"></span></div><div class="skill-word">${word(v)}</div></article>`}).join('')}
+function render(){if(!students.length)return;if(activeIndex<0||activeIndex>=students.length)activeIndex=0;const st=students[activeIndex],o=overall(st),lt=latestTest(st);renderTabs();$('studentName').textContent=st.name;$('levelBadge').textContent=st.level||'English';$('profileMeta').textContent=[st.group,st.level].filter(Boolean).join(' · ')||'English learner';$('teacherLine').textContent=st.teacher?`Teacher: ${st.teacher}`:'JollyEnglish';$('overallRing').style.setProperty('--pct',Number.isFinite(o)?o:0);$('ringValue').textContent=fmt(o);$('overallNote').textContent=word(o);$('mascotSpeech').textContent=mascot(o);$('latestName').textContent=lt?lt.test:'No test yet';$('latestDate').textContent=lt?.date||'';$('latestScore').textContent=lt?fmt(lt.score):'—';$('latestCaption').textContent=lt?word(lt.score):'Waiting for results';$('testDetail').classList.remove('open');renderTests(st);renderSkills(st)}
+function showDetail(testIndex){const st=students[activeIndex],t=TESTS[testIndex],obj=st.tests[t]||{};$('testDetail').innerHTML=`<div class="detail-top"><div class="detail-title">${t}</div><div class="detail-date">${escapeHtml(st.dates[t]||'')}</div></div><div class="detail-grid">${SKILLS.map(s=>`<div class="detail-item"><span class="detail-skill">${s}</span><strong>${fmt(obj[s])}</strong><div class="tiny"><span style="width:${obj[s]||0}%;background:${scoreColor(obj[s])}"></span></div></div>`).join('')}</div>`;$('testDetail').classList.add('open')}
+$('studentTabs').addEventListener('click',e=>{const btn=e.target.closest('[data-student-index]');if(!btn)return;const i=Number(btn.dataset.studentIndex);if(Number.isInteger(i)&&students[i]){activeIndex=i;render()}});
+$('testsGrid').addEventListener('click',e=>{const stop=e.target.closest('[data-test-index]');if(stop)showDetail(Number(stop.dataset.testIndex))});
+function showError(msg){$('errorBox').textContent=msg;$('errorBox').classList.remove('hidden');$('statusDot').classList.add('error');$('statusText').textContent='Could not load tracker data'}
+function clearError(){$('errorBox').classList.add('hidden');$('statusDot').classList.remove('error')}
+async function loadData({silent=false}={}){const btn=$('refreshBtn');btn.disabled=true;btn.classList.add('loading');if(!silent)$('statusText').textContent='Loading latest data…';clearError();try{const r=await fetch(CSV_URL+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error(`data.csv is not available (HTTP ${r.status}).`);const parsed=convert(parseCSV(await r.text()));if(!parsed.length)throw new Error('No student blocks were recognized in data.csv.');const prev=students[activeIndex]?.name;students=parsed;const found=students.findIndex(s=>s.name===prev);activeIndex=found>=0?found:0;render();$('statusText').textContent='Data from Google Sheets';$('updatedText').textContent='Last updated: '+new Date().toLocaleString([],{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}catch(err){console.error(err);showError(err.message)}finally{btn.disabled=false;btn.classList.remove('loading')}}
+$('refreshBtn').addEventListener('click',()=>loadData());
+loadData();setInterval(()=>loadData({silent:true}),AUTO_REFRESH_MS);
+</script>
+</body>
+</html>
