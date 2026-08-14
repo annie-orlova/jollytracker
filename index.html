@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JollyEnglish Progress Tracker</title>
+  <style>
+    :root {
+      --bg: #f7f5ff;
+      --surface: rgba(255,255,255,.88);
+      --surface-strong: #ffffff;
+      --ink: #26223a;
+      --muted: #77718d;
+      --primary: #7766d7;
+      --primary-2: #9987f2;
+      --accent: #ffbb64;
+      --mint: #77cdb8;
+      --rose: #f08ca7;
+      --sky: #76bce8;
+      --line: #e8e3f6;
+      --shadow: 0 16px 45px rgba(69, 54, 125, .10);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-rounded, "Avenir Next", "Segoe UI", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 5% 5%, rgba(153,135,242,.18), transparent 24rem),
+        radial-gradient(circle at 95% 0%, rgba(255,187,100,.18), transparent 28rem),
+        linear-gradient(180deg, #faf9ff 0%, #f6f9ff 100%);
+    }
+
+    button, select { font: inherit; }
+    button { cursor: pointer; }
+
+    .app {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 56px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1.35fr .65fr;
+      gap: 30px;
+      align-items: center;
+      min-height: 280px;
+      padding: 38px 42px;
+      border: 1px solid rgba(255,255,255,.9);
+      border-radius: 34px;
+      background: linear-gradient(135deg, rgba(255,255,255,.96), rgba(244,240,255,.92));
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before, .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      pointer-events: none;
+    }
+    .hero::before {
+      width: 270px; height: 270px;
+      background: rgba(119,205,184,.11);
+      right: -60px; bottom: -110px;
+    }
+    .hero::after {
+      width: 140px; height: 140px;
+      background: rgba(255,187,100,.12);
+      right: 240px; top: -70px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.72);
+      color: var(--primary);
+      font-weight: 800;
+      letter-spacing: .02em;
+      font-size: 14px;
+    }
+    .brand-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+
+    h1 {
+      margin: 18px 0 8px;
+      max-width: 680px;
+      font-size: clamp(38px, 5vw, 66px);
+      line-height: .98;
+      letter-spacing: -.045em;
+    }
+    .hero-copy p {
+      margin: 0;
+      max-width: 620px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.55;
+    }
+    .motto {
+      margin-top: 20px;
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-weight: 800;
+      color: #51488d;
+    }
+    .motto .spark { color: var(--accent); }
+
+    .mascot-wrap {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .mascot {
+      width: min(260px, 100%);
+      filter: drop-shadow(0 18px 18px rgba(67,54,102,.14));
+      animation: floaty 4.5s ease-in-out infinite;
+    }
+    @keyframes floaty { 50% { transform: translateY(-8px) rotate(-1deg); } }
+    .speech {
+      position: relative;
+      margin-top: -4px;
+      max-width: 270px;
+      padding: 12px 17px;
+      text-align: center;
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 10px 30px rgba(64,53,105,.10);
+      font-size: 14px;
+      font-weight: 800;
+      color: #4e4770;
+    }
+    .speech::before {
+      content: "";
+      position: absolute;
+      width: 14px; height: 14px;
+      background: #fff;
+      top: -7px; left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 14px;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin: 26px 0 18px;
+    }
+    .student-tabs { display: flex; gap: 9px; flex-wrap: wrap; }
+    .student-tab, .refresh-btn {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 16px;
+      background: rgba(255,255,255,.83);
+      color: #5f5878;
+      font-weight: 800;
+      transition: .2s ease;
+    }
+    .student-tab:hover, .refresh-btn:hover { transform: translateY(-1px); border-color: #cfc5ef; }
+    .student-tab.active {
+      color: #fff;
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 8px 20px rgba(119,102,215,.25);
+    }
+    .refresh-btn { display: inline-flex; align-items: center; gap: 8px; }
+    .refresh-btn.loading .refresh-icon { animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1.15fr repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .card {
+      border: 1px solid rgba(232,227,246,.9);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 10px 34px rgba(67,54,102,.07);
+    }
+    .profile-card {
+      min-height: 156px;
+      padding: 23px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: linear-gradient(145deg, #fff, #f6f1ff);
+    }
+    .eyebrow { color: var(--muted); font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .11em; }
+    .profile-name { margin: 6px 0 0; font-size: 30px; letter-spacing: -.025em; }
+    .profile-meta { margin-top: 10px; color: var(--muted); font-size: 14px; }
+
+    .metric-card { padding: 21px; min-height: 156px; position: relative; overflow: hidden; }
+    .metric-card::after {
+      content: ""; position: absolute; width: 72px; height: 72px; border-radius: 50%; right: -20px; bottom: -20px; opacity: .14;
+    }
+    .metric-card.average::after { background: var(--primary); }
+    .metric-card.homework::after { background: var(--accent); }
+    .metric-card.attendance::after { background: var(--mint); }
+    .metric-label { color: var(--muted); font-weight: 800; font-size: 13px; }
+    .metric-value { margin-top: 16px; font-size: 38px; font-weight: 900; letter-spacing: -.04em; }
+    .metric-note { margin-top: 4px; font-size: 12px; color: var(--muted); }
+
+    .section-card { padding: 26px; margin-top: 18px; }
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 15px; margin-bottom: 20px; }
+    .section-head h2 { margin: 0; font-size: 23px; letter-spacing: -.025em; }
+    .section-head p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+
+    .tests-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+    }
+    .test-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 138px;
+      padding: 17px;
+      border: 1px solid var(--line);
+      border-radius: 19px;
+      background: #fff;
+    }
+    .test-card.empty { opacity: .58; background: #fbfaff; }
+    .test-title { font-size: 13px; font-weight: 900; color: #615b73; }
+    .test-score { margin-top: 11px; font-size: 31px; font-weight: 900; letter-spacing: -.04em; }
+    .mini-bar { height: 8px; margin-top: 13px; border-radius: 99px; background: #eeeaf7; overflow: hidden; }
+    .mini-fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--primary), var(--primary-2)); transition: width .5s ease; }
+    .test-status { margin-top: 8px; font-size: 11px; font-weight: 800; color: var(--muted); }
+
+    .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 13px 24px; }
+    .skill-row {
+      display: grid;
+      grid-template-columns: 100px 1fr 45px;
+      align-items: center;
+      gap: 12px;
+      min-height: 38px;
+    }
+    .skill-name { font-weight: 800; font-size: 14px; }
+    .skill-track { height: 11px; border-radius: 99px; background: #eeeaf7; overflow: hidden; }
+    .skill-fill { height: 100%; border-radius: inherit; transition: width .5s ease; }
+    .skill-pct { text-align: right; font-size: 13px; font-weight: 900; }
+
+    .footer {
+      margin-top: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--mint); margin-right: 6px; }
+    .status-dot.error { background: var(--rose); }
+
+    .empty-state {
+      padding: 34px;
+      text-align: center;
+      color: var(--muted);
+    }
+    .error-box {
+      margin: 18px 0;
+      padding: 14px 17px;
+      border: 1px solid #f2cad5;
+      border-radius: 16px;
+      background: #fff5f7;
+      color: #815265;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .hidden { display: none !important; }
+
+    @media (max-width: 920px) {
+      .hero { grid-template-columns: 1fr; text-align: center; padding: 32px 25px; }
+      .hero-copy p { margin-inline: auto; }
+      .motto { justify-content: center; }
+      .mascot { width: 210px; }
+      .summary-grid { grid-template-columns: repeat(3, 1fr); }
+      .profile-card { grid-column: 1 / -1; }
+      .tests-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 650px) {
+      .app { width: min(100% - 18px, 1180px); padding-top: 10px; }
+      .hero { border-radius: 25px; }
+      .summary-grid { grid-template-columns: 1fr; }
+      .profile-card { grid-column: auto; }
+      .tests-grid { grid-template-columns: repeat(2, 1fr); }
+      .tests-grid .test-card:last-child { grid-column: 1 / -1; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .section-card { padding: 19px; }
+      .skill-row { grid-template-columns: 90px 1fr 42px; gap: 8px; }
+      .footer { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="brand"><span class="brand-dot"></span> JollyEnglish</div>
+        <h1>Learning journey tracker</h1>
+        <p>See progress, celebrate wins and notice the next small step. Your Google Sheet stays the source of truth — this dashboard turns it into a friendly visual story.</p>
+        <div class="motto"><span class="spark">✦</span> Small steps. Big adventures.</div>
+      </div>
+
+      <div class="mascot-wrap" aria-label="JollyEnglish hedgehog mascot">
+        <svg class="mascot" viewBox="0 0 320 260" role="img" aria-labelledby="hedgehogTitle">
+          <title id="hedgehogTitle">A cheerful minimal hedgehog holding an English learning book</title>
+          <defs>
+            <linearGradient id="spines" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#6b5aa5"/>
+              <stop offset="1" stop-color="#4e4477"/>
+            </linearGradient>
+            <linearGradient id="body" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#f5c18f"/>
+              <stop offset="1" stop-color="#e7a66f"/>
+            </linearGradient>
+          </defs>
+          <path d="M74 176C50 148 50 111 65 83L43 70l30-8-10-30 31 16 6-35 25 28 20-32 14 36 31-23 2 39 39-9-19 34 36 13-32 26 27 28-42 7 8 39-39-14-10 35-30-23-22 27-16-33c-24 5-54-2-68-35z" fill="url(#spines)"/>
+          <path d="M112 70c32-18 79-5 100 29 16 25 11 63-11 87-22 23-62 33-93 18-31-14-49-52-37-83 8-21 22-39 41-51z" fill="url(#body)"/>
+          <path d="M198 112c15 2 30 8 43 18-13 5-28 10-43 10z" fill="#e7a66f"/>
+          <circle cx="237" cy="130" r="7" fill="#302c40"/>
+          <circle cx="159" cy="106" r="6" fill="#302c40"/>
+          <circle cx="157" cy="104" r="2" fill="#fff"/>
+          <path d="M168 134c8 9 19 9 28 1" fill="none" stroke="#8f5e58" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="140" cy="130" r="10" fill="#e98f8c" opacity=".55"/>
+          <path d="M105 173c-6 14-7 30-4 42M192 178c8 12 10 25 8 38" stroke="#76537b" stroke-width="9" stroke-linecap="round"/>
+          <rect x="121" y="160" width="83" height="61" rx="8" transform="rotate(-4 121 160)" fill="#fff" stroke="#7766d7" stroke-width="4"/>
+          <rect x="128" y="167" width="69" height="47" rx="5" transform="rotate(-4 128 167)" fill="#f7f3ff"/>
+          <text x="162" y="189" text-anchor="middle" fill="#7766d7" font-size="15" font-family="Arial, sans-serif" font-weight="700">ENGLISH</text>
+          <text x="163" y="207" text-anchor="middle" fill="#ffad4d" font-size="17" font-family="Arial, sans-serif" font-weight="900">A+</text>
+          <path d="M110 180c8-1 15 3 20 10M205 177c-8 0-14 4-18 11" fill="none" stroke="#e7a66f" stroke-width="10" stroke-linecap="round"/>
+          <path d="M101 223c-14 5-23 3-28-4M203 222c13 5 22 3 28-4" fill="none" stroke="#4e4477" stroke-width="8" stroke-linecap="round"/>
+          <path d="M86 47c-12-12-17-28-11-37 14 5 24 17 26 33" fill="#f5c18f" stroke="#6b5aa5" stroke-width="4"/>
+          <path d="M92 45c-5-7-7-15-6-21 6 4 10 10 11 17" fill="#e98f8c" opacity=".65"/>
+        </svg>
+        <div class="speech" id="mascotSpeech">Ready for another small step?</div>
+      </div>
+    </section>
+
+    <div id="errorBox" class="error-box hidden"></div>
+
+    <section class="toolbar">
+      <div class="student-tabs" id="studentTabs"></div>
+      <button class="refresh-btn" id="refreshBtn" type="button" title="Reload the latest data from Google Sheets">
+        <span class="refresh-icon">↻</span> Refresh data
+      </button>
+    </section>
+
+    <section class="summary-grid">
+      <article class="card profile-card">
+        <div>
+          <div class="eyebrow">Student</div>
+          <h2 class="profile-name" id="studentName">—</h2>
+          <div class="profile-meta" id="profileMeta">Loading data…</div>
+        </div>
+        <div class="eyebrow" id="teacherLine">JollyEnglish progress tracker</div>
+      </article>
+      <article class="card metric-card average">
+        <div class="metric-label">Overall progress</div>
+        <div class="metric-value" id="overallValue">—</div>
+        <div class="metric-note">Average of available test skills</div>
+      </article>
+      <article class="card metric-card homework">
+        <div class="metric-label">Homework</div>
+        <div class="metric-value" id="homeworkValue">—</div>
+        <div class="metric-note">Current completion/result</div>
+      </article>
+      <article class="card metric-card attendance">
+        <div class="metric-label">Attendance</div>
+        <div class="metric-value" id="attendanceValue">—</div>
+        <div class="metric-note">Current attendance rate</div>
+      </article>
+    </section>
+
+    <section class="card section-card">
+      <div class="section-head">
+        <div>
+          <h2>Milestones</h2>
+          <p>Test journey from the first checkpoint to the end-of-year test.</p>
+        </div>
+      </div>
+      <div class="tests-grid" id="testsGrid"></div>
+    </section>
+
+    <section class="card section-card">
+      <div class="section-head">
+        <div>
+          <h2>Skills snapshot</h2>
+          <p>Latest available result for each skill.</p>
+        </div>
+      </div>
+      <div class="skills-grid" id="skillsGrid"></div>
+    </section>
+
+    <footer class="footer">
+      <span><span id="statusDot" class="status-dot"></span><span id="statusText">Loading tracker data…</span></span>
+      <span id="updatedText">Not updated yet</span>
+    </footer>
+  </main>
+
+  <script>
+    // The browser reads a same-origin CSV file from this GitHub repository.
+    // GitHub Actions refreshes data.csv from the published Google Sheet.
+    const CSV_URL = './data.csv';
+    const AUTO_REFRESH_MS = 5 * 60 * 1000;
+
+    const SKILLS = ['Listening', 'Writing', 'Reading', 'Speaking', 'Grammar', 'Vocabulary'];
+    const TESTS = ['Test 1', 'Test 2', 'Test 3', 'Test 4', 'End of the year test'];
+
+    let students = [];
+    let activeStudent = null;
+
+    const $ = (id) => document.getElementById(id);
+
+    function normalize(s) {
+      return String(s ?? '').trim().toLowerCase().replace(/[%]/g, '').replace(/[_\-]+/g, ' ').replace(/\s+/g, ' ');
+    }
+
+    function parseCSV(text) {
+      const rows = [];
+      let row = [], field = '', quoted = false;
+      for (let i = 0; i < text.length; i++) {
+        const c = text[i], n = text[i + 1];
+        if (quoted) {
+          if (c === '"' && n === '"') { field += '"'; i++; }
+          else if (c === '"') quoted = false;
+          else field += c;
+        } else {
+          if (c === '"') quoted = true;
+          else if (c === ',') { row.push(field); field = ''; }
+          else if (c === '\n') { row.push(field); rows.push(row); row = []; field = ''; }
+          else if (c !== '\r') field += c;
+        }
+      }
+      if (field.length || row.length) { row.push(field); rows.push(row); }
+      return rows.filter(r => r.some(v => String(v).trim() !== ''));
+    }
+
+    function toPercent(v) {
+      if (v === null || v === undefined || String(v).trim() === '') return null;
+      let s = String(v).trim().replace(',', '.').replace('%', '');
+      let n = Number(s);
+      if (!Number.isFinite(n)) return null;
+      if (n >= 0 && n <= 1 && !String(v).includes('%')) n *= 100;
+      return Math.max(0, Math.min(100, Math.round(n * 10) / 10));
+    }
+
+    function findColumn(headers, candidates) {
+      const hs = headers.map(normalize);
+      for (const c of candidates) {
+        const cn = normalize(c);
+        const exact = hs.findIndex(h => h === cn);
+        if (exact >= 0) return exact;
+      }
+      for (const c of candidates) {
+        const cn = normalize(c);
+        const partial = hs.findIndex(h => h.includes(cn));
+        if (partial >= 0) return partial;
+      }
+      return -1;
+    }
+
+    function detectHeaderRow(rows) {
+      let best = 0, bestScore = -1;
+      rows.slice(0, 12).forEach((r, idx) => {
+        const joined = r.map(normalize).join(' | ');
+        let score = 0;
+        ['student','name','listening','writing','reading','speaking','grammar','vocabulary','test','homework','attendance'].forEach(k => {
+          if (joined.includes(k)) score++;
+        });
+        if (score > bestScore) { bestScore = score; best = idx; }
+      });
+      return best;
+    }
+
+    function inferMeta(rows, headerIndex) {
+      const meta = { group: '', level: '', teacher: '' };
+      const pre = rows.slice(0, headerIndex + 1).flat().map(v => String(v).trim()).filter(Boolean);
+      const text = pre.join(' | ');
+      const groupMatch = text.match(/(?:group|class)\s*[:\-]?\s*([^|,]+)/i);
+      const levelMatch = text.match(/level\s*[:\-]?\s*([^|,]+)/i);
+      const teacherMatch = text.match(/teacher\s*[:\-]?\s*([^|,]+)/i);
+      if (groupMatch) meta.group = groupMatch[1].trim();
+      if (levelMatch) meta.level = levelMatch[1].trim();
+      if (teacherMatch) meta.teacher = teacherMatch[1].trim();
+      return meta;
+    }
+
+    function parseLongFormat(headers, dataRows, meta) {
+      const nameIdx = findColumn(headers, ['student', 'student name', 'name']);
+      const testIdx = findColumn(headers, ['test', 'checkpoint', 'milestone']);
+      if (nameIdx < 0) return [];
+
+      const hwIdx = findColumn(headers, ['homework', 'hw']);
+      const attIdx = findColumn(headers, ['attendance', 'attend']);
+      const groupIdx = findColumn(headers, ['group', 'class']);
+      const levelIdx = findColumn(headers, ['level']);
+      const teacherIdx = findColumn(headers, ['teacher']);
+      const skillIndexes = Object.fromEntries(SKILLS.map(s => [s, findColumn(headers, [s])]));
+
+      const map = new Map();
+      dataRows.forEach(row => {
+        const name = String(row[nameIdx] ?? '').trim();
+        if (!name || normalize(name).includes('average')) return;
+        if (!map.has(name)) map.set(name, {
+          name,
+          group: String(row[groupIdx] ?? meta.group ?? '').trim(),
+          level: String(row[levelIdx] ?? meta.level ?? '').trim(),
+          teacher: String(row[teacherIdx] ?? meta.teacher ?? '').trim(),
+          homework: null,
+          attendance: null,
+          tests: {}
+        });
+        const st = map.get(name);
+        const testNameRaw = testIdx >= 0 ? String(row[testIdx] ?? '').trim() : '';
+        const testName = canonicalTest(testNameRaw || 'Test 1');
+        if (!st.tests[testName]) st.tests[testName] = {};
+        SKILLS.forEach(skill => {
+          const idx = skillIndexes[skill];
+          const val = idx >= 0 ? toPercent(row[idx]) : null;
+          if (val !== null) st.tests[testName][skill] = val;
+        });
+        const hw = hwIdx >= 0 ? toPercent(row[hwIdx]) : null;
+        const at = attIdx >= 0 ? toPercent(row[attIdx]) : null;
+        if (hw !== null) st.homework = hw;
+        if (at !== null) st.attendance = at;
+      });
+      return [...map.values()];
+    }
+
+    function canonicalTest(v) {
+      const n = normalize(v);
+      if (/end|final|year/.test(n)) return 'End of the year test';
+      const m = n.match(/(?:test|checkpoint|milestone)?\s*([1-4])/);
+      if (m) return `Test ${m[1]}`;
+      return v || 'Test 1';
+    }
+
+    function parseWideFormat(headers, dataRows, meta) {
+      const nameIdx = findColumn(headers, ['student', 'student name', 'name']);
+      if (nameIdx < 0) return [];
+      const groupIdx = findColumn(headers, ['group', 'class']);
+      const levelIdx = findColumn(headers, ['level']);
+      const teacherIdx = findColumn(headers, ['teacher']);
+      const hwIdx = findColumn(headers, ['homework', 'hw']);
+      const attIdx = findColumn(headers, ['attendance', 'attend']);
+
+      return dataRows.map(row => {
+        const name = String(row[nameIdx] ?? '').trim();
+        if (!name || normalize(name).includes('average')) return null;
+        const st = {
+          name,
+          group: String(row[groupIdx] ?? meta.group ?? '').trim(),
+          level: String(row[levelIdx] ?? meta.level ?? '').trim(),
+          teacher: String(row[teacherIdx] ?? meta.teacher ?? '').trim(),
+          homework: hwIdx >= 0 ? toPercent(row[hwIdx]) : null,
+          attendance: attIdx >= 0 ? toPercent(row[attIdx]) : null,
+          tests: {}
+        };
+
+        TESTS.forEach(test => st.tests[test] = {});
+        headers.forEach((h, i) => {
+          const hn = normalize(h);
+          SKILLS.forEach(skill => {
+            if (!hn.includes(normalize(skill))) return;
+            let test = 'Test 1';
+            if (/end|final|year/.test(hn)) test = 'End of the year test';
+            else {
+              const m = hn.match(/(?:test\s*)?([1-4])/);
+              if (m) test = `Test ${m[1]}`;
+            }
+            const val = toPercent(row[i]);
+            if (val !== null) st.tests[test][skill] = val;
+          });
+        });
+        return st;
+      }).filter(Boolean);
+    }
+
+    function convertRows(rows) {
+      if (!rows.length) return [];
+      const headerIndex = detectHeaderRow(rows);
+      const headers = rows[headerIndex].map(v => String(v).trim());
+      const dataRows = rows.slice(headerIndex + 1);
+      const meta = inferMeta(rows, headerIndex);
+
+      // If a dedicated Test column exists, treat rows as long format; otherwise wide.
+      const testIdx = findColumn(headers, ['test', 'checkpoint', 'milestone']);
+      let result = testIdx >= 0
+        ? parseLongFormat(headers, dataRows, meta)
+        : parseWideFormat(headers, dataRows, meta);
+
+      // Fallback: if a long-format parse produced no skill data, try wide.
+      const hasSkillData = result.some(s => Object.values(s.tests).some(t => Object.keys(t).length));
+      if (!hasSkillData) result = parseWideFormat(headers, dataRows, meta);
+      return result;
+    }
+
+    function average(arr) {
+      const nums = arr.filter(v => v !== null && v !== undefined && Number.isFinite(v));
+      return nums.length ? Math.round((nums.reduce((a,b) => a+b, 0) / nums.length) * 10) / 10 : null;
+    }
+
+    function testAverage(testObj) {
+      return average(SKILLS.map(s => testObj?.[s] ?? null));
+    }
+
+    function allTestAverages(student) {
+      return TESTS.map(t => testAverage(student.tests[t] || {}));
+    }
+
+    function latestSkill(student, skill) {
+      for (let i = TESTS.length - 1; i >= 0; i--) {
+        const v = student.tests[TESTS[i]]?.[skill];
+        if (v !== null && v !== undefined && Number.isFinite(v)) return v;
+      }
+      return null;
+    }
+
+    function scoreColor(v) {
+      if (v === null) return '#cfc9dc';
+      if (v >= 85) return '#77cdb8';
+      if (v >= 70) return '#7766d7';
+      if (v >= 55) return '#ffbb64';
+      return '#f08ca7';
+    }
+
+    function fmt(v) {
+      if (v === null || v === undefined || !Number.isFinite(v)) return '—';
+      return `${Math.round(v * 10) / 10}%`;
+    }
+
+    function mascotMessage(score) {
+      if (score === null) return 'Ready for another small step?';
+      if (score >= 90) return 'Amazing adventure — keep shining! ✦';
+      if (score >= 80) return 'Great journey! You’re growing strong.';
+      if (score >= 70) return 'Nice progress — keep going!';
+      if (score >= 55) return 'One small step at a time.';
+      return 'Every adventure starts with practice.';
+    }
+
+    function renderTabs() {
+      $('studentTabs').innerHTML = '';
+      students.forEach((st, idx) => {
+        const b = document.createElement('button');
+        b.className = 'student-tab' + (st === activeStudent ? ' active' : '');
+        b.type = 'button';
+        b.textContent = st.name;
+        b.addEventListener('click', () => { activeStudent = st; render(); });
+        $('studentTabs').appendChild(b);
+      });
+    }
+
+    function renderTests(student) {
+      $('testsGrid').innerHTML = TESTS.map(test => {
+        const avg = testAverage(student.tests[test] || {});
+        const empty = avg === null;
+        return `<article class="test-card ${empty ? 'empty' : ''}">
+          <div class="test-title">${test}</div>
+          <div class="test-score">${fmt(avg)}</div>
+          <div class="mini-bar"><div class="mini-fill" style="width:${avg ?? 0}%; background:${scoreColor(avg)}"></div></div>
+          <div class="test-status">${empty ? 'Not completed yet' : 'Checkpoint complete'}</div>
+        </article>`;
+      }).join('');
+    }
+
+    function renderSkills(student) {
+      $('skillsGrid').innerHTML = SKILLS.map(skill => {
+        const v = latestSkill(student, skill);
+        return `<div class="skill-row">
+          <div class="skill-name">${skill}</div>
+          <div class="skill-track"><div class="skill-fill" style="width:${v ?? 0}%; background:${scoreColor(v)}"></div></div>
+          <div class="skill-pct">${fmt(v)}</div>
+        </div>`;
+      }).join('');
+    }
+
+    function render() {
+      renderTabs();
+      if (!activeStudent) return;
+      const st = activeStudent;
+      const overall = average(allTestAverages(st));
+      $('studentName').textContent = st.name;
+      $('profileMeta').textContent = [st.group, st.level].filter(Boolean).join(' · ') || 'English learner';
+      $('teacherLine').textContent = st.teacher ? `Teacher: ${st.teacher}` : 'JollyEnglish progress tracker';
+      $('overallValue').textContent = fmt(overall);
+      $('homeworkValue').textContent = fmt(st.homework);
+      $('attendanceValue').textContent = fmt(st.attendance);
+      $('mascotSpeech').textContent = mascotMessage(overall);
+      renderTests(st);
+      renderSkills(st);
+    }
+
+    function showError(message) {
+      $('errorBox').textContent = message;
+      $('errorBox').classList.remove('hidden');
+      $('statusDot').classList.add('error');
+      $('statusText').textContent = 'Could not load Google Sheets data';
+    }
+
+    function clearError() {
+      $('errorBox').classList.add('hidden');
+      $('statusDot').classList.remove('error');
+    }
+
+    async function loadRows() {
+      const url = CSV_URL + '?_=' + Date.now();
+      const response = await fetch(url, { cache: 'no-store' });
+      if (!response.ok) {
+        throw new Error(`data.csv is not ready yet (HTTP ${response.status}). Run the “Update tracker data” GitHub Action once.`);
+      }
+      return parseCSV(await response.text());
+    }
+
+    async function loadData({silent = false} = {}) {
+      const btn = $('refreshBtn');
+      btn.classList.add('loading');
+      btn.disabled = true;
+      if (!silent) $('statusText').textContent = 'Loading latest data…';
+      clearError();
+
+      try {
+        const rows = await loadRows();
+        const parsed = convertRows(rows);
+        if (!parsed.length) throw new Error('No student rows were recognized. Check the column headers in the published sheet.');
+
+        const previousName = activeStudent?.name;
+        students = parsed;
+        activeStudent = students.find(s => s.name === previousName) || students[0];
+        render();
+        $('statusText').textContent = 'Synced from Google Sheets';
+        $('updatedText').textContent = 'Updated ' + new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+      } catch (err) {
+        console.error(err);
+        showError(`I couldn't load the tracker data. ${err.message}`);
+        if (!students.length) {
+          $('studentTabs').innerHTML = '';
+          $('testsGrid').innerHTML = '<div class="empty-state">Waiting for data…</div>';
+          $('skillsGrid').innerHTML = '<div class="empty-state">Waiting for data…</div>';
+        }
+      } finally {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+      }
+    }
+
+    $('refreshBtn').addEventListener('click', () => loadData());
+    loadData();
+    setInterval(() => loadData({silent: true}), AUTO_REFRESH_MS);
+  </script>
+</body>
+</html>
